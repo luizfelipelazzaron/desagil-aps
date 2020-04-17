@@ -17,18 +17,19 @@ public class View extends JPanel implements ActionListener {
             menu.addItem(gate);
         }
 
-        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(menu);
         addGateView(0);                  //conferir se o erro permanece após conclusão de GateView
         menu.addActionListener(this);        //conferir se o erro permanece após conclusão de GateView
     }
 
-    private void addGateView (int index) {
+    private void addGateView(int index) {
         Gate gate = menu.getItemAt(index);
         gateView = new GateView(gate);          //conferir se o erro permanece após conclusão de GateView
         add(gateView);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent event) {
