@@ -1,23 +1,32 @@
 package br.pro.hashi.ensino.desagil.aps.view;
 
 import br.pro.hashi.ensino.desagil.aps.model.Gate;
+import br.pro.hashi.ensino.desagil.aps.model.Light;
 import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.net.URL;
 
-public class GateView extends FixedPanel implements ItemListener {
+public class GateView extends FixedPanel implements ItemListener, MouseListener {
     private final Gate gate;
     private final JCheckBox[] inputs;
     private final JCheckBox result;
-    private Color color;
+    private final Image image;
     private final Switch[] switches;
+    private final Light light;
+    private Color color;
 
     public GateView(Gate gate) {
         super(180, 250);
         this.gate = gate;
+        light = new Light(255,0,0);
+
+        Color color = light.getColor();
 
         int inputSize = gate.getInputSize();
         switches = new Switch[inputSize];
@@ -49,7 +58,12 @@ public class GateView extends FixedPanel implements ItemListener {
         add(saidaLabel, marginLeft, marginTop + 20 * inputSize, 200, 15);
         add(result, marginLeft, marginTop + 20 + 20 * inputSize, 200, 15);
 
-        color = Color.BLACK;
+        // Carregamento das imagens
+        String name = gate.toString() + ".png";
+        URL url = getClass().getClassLoader().getResource(name);
+        image = getToolkit().getImage(url);
+
+      //  color = Color.BLACK;
 
         result.setEnabled(false);
 
@@ -71,11 +85,59 @@ public class GateView extends FixedPanel implements ItemListener {
     }
 
     @Override
+    public void mouseClicked(MouseEvent event) {
+
+        // Descobre em qual posição o clique ocorreu.
+        int x = event.getX();
+        int y = event.getY();
+
+        // Se o clique foi dentro do quadrado colorido...
+        if (x >= 210 && x < 235 && y >= 311 && y < 336) {
+
+            // ...então abrimos a janela seletora de cor...
+            color = JColorChooser.showDialog(this, null, color);
+
+            // ...e chamamos repaint para atualizar a tela.
+            repaint();
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent event) {
+        // Não precisamos de uma reação específica à ação de pressionar
+        // um botão do mouse, mas o contrato com MouseListener obriga
+        // esse método a existir, então simplesmente deixamos vazio.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent event) {
+        // Não precisamos de uma reação específica à ação de soltar
+        // um botão do mouse, mas o contrato com MouseListener obriga
+        // esse método a existir, então simplesmente deixamos vazio.
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent event) {
+        // Não precisamos de uma reação específica à ação do mouse
+        // entrar no painel, mas o contrato com MouseListener obriga
+        // esse método a existir, então simplesmente deixamos vazio.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent event) {
+        // Não precisamos de uma reação específica à ação do mouse
+        // sair do painel, mas o contrato com MouseListener obriga
+        // esse método a existir, então simplesmente deixamos vazio.
+    }
+
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        g.drawImage(image, 5, 40, 110, 110, this);
+
         g.setColor(color);
-//        g.fillRect(300,400,10,10);
+        g.fillRect(300,400,10,10);
 
         getToolkit().sync();
     }
