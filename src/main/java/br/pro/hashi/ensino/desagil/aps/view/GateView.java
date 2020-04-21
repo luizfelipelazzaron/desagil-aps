@@ -6,10 +6,7 @@ import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.net.URL;
 
 public class GateView extends FixedPanel implements ItemListener, MouseListener {
@@ -69,6 +66,7 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         image = getToolkit().getImage(url);
 
 //        color = Color.BLACK;
+        addMouseListener(this);
 
         result.setEnabled(false);
 
@@ -96,6 +94,7 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         this.result.setSelected(result);
     }
 
+
     @Override
     public void mouseClicked(MouseEvent event) {
 
@@ -104,10 +103,10 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         int y = event.getY();
 
         // Se o clique foi dentro do quadrado colorido...
-        if (x >= 120 && x < 140 && y >= 20 && y < 40) {
+        if (x >= 120 && x < 140 && y >= 40 && y < 60) {
 
             // ...então abrimos a janela seletora de cor...
-            this.color = JColorChooser.showDialog(this, null, color);
+            this.color = JColorChooser.showDialog(this, null, this.color);
 
             // ...e chamamos repaint para atualizar a tela.
             repaint();
