@@ -1,7 +1,6 @@
 package br.pro.hashi.ensino.desagil.aps.view;
 
 import br.pro.hashi.ensino.desagil.aps.model.Gate;
-import br.pro.hashi.ensino.desagil.aps.model.Light;
 import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
@@ -15,16 +14,12 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
     private final JCheckBox result;
     private final Image image;
     private final Switch[] switches;
-    //private final Light light;
     private Color color;
     private Color trueColor;
 
     public GateView(Gate gate) {
-        super(180, 250);
+        super(180, 120);
         this.gate = gate;
-        //light = new Light(255,0,0);
-
-        //Color color = light.getColor();
 
         int inputSize = gate.getInputSize();
         switches = new Switch[inputSize];
@@ -43,9 +38,6 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         marginLeft = 10;
         marginTop = 30;
 
-        JLabel inputsLabel = new JLabel("Entrada:");
-        //add(inputsLabel, marginLeft, 10, 200, 15);
-
         for (int i = 0; i < inputSize; i++) {
             if (inputSize == 2) {
                 add(inputs[i], marginLeft, marginTop + 20 * i, 20, 15);
@@ -56,9 +48,6 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         }
 
         JLabel saidaLabel = new JLabel("Saída:");
-
-        //add(saidaLabel, marginLeft + 40, marginTop + 12, 20, 15);
-//        add(result, marginLeft + 110, marginTop + 12, 20, 15);
 
         // Carregamento das imagens
         String name = gate.toString() + ".png";
@@ -99,6 +88,16 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         this.result.setSelected(result);
     }
 
+    private boolean clickInsideCircle(int x, int y) {
+        if(Math.pow(x-130,2) + Math.pow(y-50,2) <= Math.pow(10,2)) {
+            System.out.println("line 93 [debug purpose]: Click event inside the circle");
+            return true;
+        } else {
+            System.out.println("line 96 [debug purpose]: Click event outside the circle");
+            return false;
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent event) {
 
@@ -106,12 +105,16 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         int x = event.getX();
         int y = event.getY();
 
-        // Se o clique foi dentro do quadrado colorido...
-//        if (Math.pow(x,2) + Math.pow(y,2) < Math.pow(20,2)) {
-        if (x >= 120 && x < 140 && y >= 40 && y < 60) {
-            // (x-x0)² + (y-y0)² < r²
-            // ...então abrimos a janela seletora de cor...
+        System.out.println("line 108 [debug purpose]: (x,y): ("+x+","+y+")");
+
+        // Se o clique foi dentro do circulo colorido/preto...
+        if ( clickInsideCircle(x,y) ) {
+            /*
+            * (x-x0)² + (y-y0)² <= r²
+            * ...então abrimos a janela seletora de cor...
+            */
             this.trueColor = JColorChooser.showDialog(this, null, this.color);
+
 
             // ...e chamamos repaint para atualizar a tela.
             update();
