@@ -61,14 +61,14 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         JLabel saidaLabel = new JLabel("Saída:");
 
         //add(saidaLabel, marginLeft + 40, marginTop + 12, 20, 15);
-        add(result, marginLeft + 110, marginTop + 12, 20, 15);
+//        add(result, marginLeft + 110, marginTop + 12, 20, 15);
 
         // Carregamento das imagens
         String name = gate.toString() + ".png";
         URL url = getClass().getClassLoader().getResource(name);
         image = getToolkit().getImage(url);
 
-        color = Color.BLACK;
+//        color = Color.BLACK;
 
         result.setEnabled(false);
 
@@ -85,7 +85,14 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         }
 
         boolean result = this.gate.read();
+        if (result) {
+            this.color = Color.RED;
+        } else {
+            this.color = Color.BLACK;
+        }
 
+        // ...e chamamos repaint para atualizar a tela. rsrsrs
+        repaint();
         this.result.setSelected(result);
     }
 
@@ -97,10 +104,10 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         int y = event.getY();
 
         // Se o clique foi dentro do quadrado colorido...
-        if (x >= 210 && x < 235 && y >= 311 && y < 336) {
+        if (x >= 120 && x < 140 && y >= 20 && y < 40) {
 
             // ...então abrimos a janela seletora de cor...
-            color = JColorChooser.showDialog(this, null, color);
+            this.color = JColorChooser.showDialog(this, null, color);
 
             // ...e chamamos repaint para atualizar a tela.
             repaint();
@@ -141,8 +148,9 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
 
         g.drawImage(image, 20, 25, 100, 50, this);
 
-        g.setColor(color);
-        g.fillRect(120,30,40,40);
+        g.setColor(this.color);
+//        g.fillRect(120,30,40,40); // linha comentada
+        g.fillOval(120,40,20,20);
 
         getToolkit().sync();
     }
