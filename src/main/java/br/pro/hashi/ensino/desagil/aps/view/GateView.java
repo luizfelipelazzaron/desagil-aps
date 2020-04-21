@@ -18,15 +18,15 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
     private final JCheckBox result;
     private final Image image;
     private final Switch[] switches;
-    private final Light light;
+    //private final Light light;
     private Color color;
 
     public GateView(Gate gate) {
         super(180, 250);
         this.gate = gate;
-        light = new Light(255,0,0);
+        //light = new Light(255,0,0);
 
-        Color color = light.getColor();
+        //Color color = light.getColor();
 
         int inputSize = gate.getInputSize();
         switches = new Switch[inputSize];
@@ -46,24 +46,29 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         marginTop = 30;
 
         JLabel inputsLabel = new JLabel("Entrada:");
-        add(inputsLabel, marginLeft, 10, 200, 15);
+        //add(inputsLabel, marginLeft, 10, 200, 15);
 
         for (int i = 0; i < inputSize; i++) {
-            add(inputs[i], marginLeft, marginTop + 20 * i, 200, 15);
-            inputs[i].addItemListener(this);
+            if (inputSize == 2) {
+                add(inputs[i], marginLeft, marginTop + 20 * i, 20, 15);
+                inputs[i].addItemListener(this);
+            } else {
+                add(inputs[i], marginLeft, marginTop + 12, 20, 15);
+                inputs[i].addItemListener(this);
+            }
         }
 
         JLabel saidaLabel = new JLabel("Saída:");
 
-        add(saidaLabel, marginLeft, marginTop + 20 * inputSize, 200, 15);
-        add(result, marginLeft, marginTop + 20 + 20 * inputSize, 200, 15);
+        //add(saidaLabel, marginLeft + 40, marginTop + 12, 20, 15);
+        add(result, marginLeft + 110, marginTop + 12, 20, 15);
 
         // Carregamento das imagens
         String name = gate.toString() + ".png";
         URL url = getClass().getClassLoader().getResource(name);
         image = getToolkit().getImage(url);
 
-      //  color = Color.BLACK;
+        color = Color.BLACK;
 
         result.setEnabled(false);
 
@@ -134,10 +139,10 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.drawImage(image, 5, 40, 110, 110, this);
+        g.drawImage(image, 20, 25, 100, 50, this);
 
         g.setColor(color);
-        g.fillRect(300,400,10,10);
+        g.fillRect(120,30,40,40);
 
         getToolkit().sync();
     }
