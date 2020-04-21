@@ -6,10 +6,7 @@ import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.net.URL;
 
 public class GateView extends FixedPanel implements ItemListener, MouseListener {
@@ -20,6 +17,7 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
     private final Switch[] switches;
     //private final Light light;
     private Color color;
+    private Color trueColor;
 
     public GateView(Gate gate) {
         super(180, 250);
@@ -51,11 +49,10 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         for (int i = 0; i < inputSize; i++) {
             if (inputSize == 2) {
                 add(inputs[i], marginLeft, marginTop + 20 * i, 20, 15);
-                inputs[i].addItemListener(this);
             } else {
                 add(inputs[i], marginLeft, marginTop + 12, 20, 15);
-                inputs[i].addItemListener(this);
             }
+            inputs[i].addItemListener(this);
         }
 
         JLabel saidaLabel = new JLabel("Saída:");
@@ -69,6 +66,7 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         image = getToolkit().getImage(url);
 
 //        color = Color.BLACK;
+        addMouseListener(this);
 
         result.setEnabled(false);
 
@@ -86,7 +84,12 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
 
         boolean result = this.gate.read();
         if (result) {
-            this.color = Color.RED;
+            if (trueColor == null) {
+                this.color = Color.RED;
+            } else {
+                this.color = this.trueColor;
+            }
+
         } else {
             this.color = Color.BLACK;
         }
@@ -104,13 +107,14 @@ public class GateView extends FixedPanel implements ItemListener, MouseListener 
         int y = event.getY();
 
         // Se o clique foi dentro do quadrado colorido...
-        if (Math.pow(x,2) + Math.pow(y,2) <= Math.pow(20,2)) {
+//        if (Math.pow(x,2) + Math.pow(y,2) < Math.pow(20,2)) {
+        if (x >= 120 && x < 140 && y >= 40 && y < 60) {
             // (x-x0)² + (y-y0)² < r²
             // ...então abrimos a janela seletora de cor...
-            color = JColorChooser.showDialog(this, null, color);
+            this.trueColor = JColorChooser.showDialog(this, null, this.color);
 
             // ...e chamamos repaint para atualizar a tela.
-            repaint();
+            update();
         }
     }
 
