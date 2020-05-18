@@ -5,15 +5,14 @@ import java.awt.*;
 
 public class FixedPanel extends JPanel {
 
-    protected FixedPanel(int width, int height) {
+    protected FixedPanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(180, 120));
     }
 
-    protected Component add(Component comp, int x, int y, int width, int height) {
+    protected void add(Component comp, int x, int y) {
         super.add(comp);
-        comp.setBounds(x, y, width, height);
+        comp.setBounds(x, y, 20, 15);
 
-        return comp;
     }
 }
